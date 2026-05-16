@@ -11,7 +11,9 @@ import {
   Settings, 
   LogOut,
   Menu,
-  X
+  X,
+  Stethoscope,
+  User
 } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -21,6 +23,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navItems = [
     { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
     { name: "Bookings", href: "/admin/bookings", icon: CalendarDays },
+    { name: "Doctors", href: "/admin/doctors", icon: Stethoscope },
+    { name: "Patients", href: "/admin/patients", icon: User },
     { name: "Users", href: "/admin/users", icon: Users },
     { name: "Settings", href: "/admin/settings", icon: Settings },
   ];
