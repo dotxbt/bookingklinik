@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Plus, MoreVertical, Edit2, Trash2, Filter } from "lucide-react";
+import { Search, Plus, MoreVertical, Edit2, Trash2, Filter, X } from "lucide-react";
 
 export default function PatientsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterGender, setFilterGender] = useState("Semua");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const itemsPerPage = 5;
 
   const patientsData = [
@@ -41,7 +42,7 @@ export default function PatientsPage() {
   }, [searchTerm, filterGender]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         <div className="flex flex-col sm:flex-row gap-4 flex-1">
           <div className="relative w-full sm:max-w-xs">
@@ -69,7 +70,10 @@ export default function PatientsPage() {
           </div>
         </div>
         
-        <button className="bg-primary-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 shadow-sm shrink-0">
+        <button 
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-primary-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 shadow-sm shrink-0"
+        >
           <Plus size={20} /> Registrasi Pasien
         </button>
       </div>
@@ -165,6 +169,77 @@ export default function PatientsPage() {
           </div>
         )}
       </div>
+
+      {/* Add Patient Modal */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-[1.5rem] shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
+              <h2 className="text-lg font-bold text-slate-800">Registrasi Pasien Baru</h2>
+              <button 
+                onClick={() => setIsAddModalOpen(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              <form className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap Pasien</label>
+                  <input type="text" placeholder="Contoh: Budi Gunawan" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Nomor Induk Kependudukan (NIK)</label>
+                  <input type="text" placeholder="Masukkan 16 digit NIK" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" />
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Tanggal Lahir</label>
+                    <input type="date" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none text-slate-700" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Jenis Kelamin</label>
+                    <select className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none appearance-none bg-white text-slate-700">
+                      <option value="">Pilih Jenis Kelamin</option>
+                      <option value="Laki-laki">Laki-laki</option>
+                      <option value="Perempuan">Perempuan</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Nomor Telepon / WhatsApp</label>
+                  <input type="tel" placeholder="Contoh: 08123456789" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Alamat Domisili</label>
+                  <textarea rows={3} placeholder="Masukkan alamat lengkap..." className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none resize-none"></textarea>
+                </div>
+              </form>
+            </div>
+            
+            <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-3 sticky bottom-0 bg-white">
+              <button 
+                onClick={() => setIsAddModalOpen(false)}
+                className="px-5 py-2.5 text-slate-600 font-medium hover:bg-slate-50 rounded-xl transition-colors"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => setIsAddModalOpen(false)}
+                className="px-5 py-2.5 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition-colors shadow-sm"
+              >
+                Simpan Data
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

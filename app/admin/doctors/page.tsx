@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Plus, MoreVertical, Edit2, Trash2, Filter } from "lucide-react";
+import { Search, Plus, MoreVertical, Edit2, Trash2, Filter, X } from "lucide-react";
 
 export default function DoctorsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPoli, setFilterPoli] = useState("Semua");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const itemsPerPage = 5;
 
   const doctorsData = [
@@ -43,7 +44,7 @@ export default function DoctorsPage() {
   }, [searchTerm, filterPoli]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         <div className="flex flex-col sm:flex-row gap-4 flex-1">
           <div className="relative w-full sm:max-w-xs">
@@ -71,7 +72,10 @@ export default function DoctorsPage() {
           </div>
         </div>
         
-        <button className="bg-primary-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 shadow-sm shrink-0">
+        <button 
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-primary-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 shadow-sm shrink-0"
+        >
           <Plus size={20} /> Tambah Dokter
         </button>
       </div>
@@ -175,6 +179,73 @@ export default function DoctorsPage() {
           </div>
         )}
       </div>
+
+      {/* Add Doctor Modal */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-[1.5rem] shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
+              <h2 className="text-lg font-bold text-slate-800">Tambah Dokter Baru</h2>
+              <button 
+                onClick={() => setIsAddModalOpen(false)}
+                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              <form className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap beserta Gelar</label>
+                  <input type="text" placeholder="Contoh: dr. Andi Wijaya, Sp.M" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Poliklinik</label>
+                  <select className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none appearance-none bg-white">
+                    <option value="">Pilih Poliklinik</option>
+                    <option value="Poli Umum">Poli Umum</option>
+                    <option value="Poli Gigi">Poli Gigi</option>
+                    <option value="Poli Anak">Poli Anak</option>
+                    <option value="Poli Penyakit Dalam">Poli Penyakit Dalam</option>
+                    <option value="Poli Mata">Poli Mata</option>
+                    <option value="Poli Kandungan">Poli Kandungan</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Nomor Telepon / WhatsApp</label>
+                  <input type="tel" placeholder="Contoh: 08123456789" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none" />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+                  <select className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none appearance-none bg-white">
+                    <option value="Active">Active</option>
+                    <option value="On Leave">On Leave</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            
+            <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-3 sticky bottom-0 bg-white">
+              <button 
+                onClick={() => setIsAddModalOpen(false)}
+                className="px-5 py-2.5 text-slate-600 font-medium hover:bg-slate-50 rounded-xl transition-colors"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => setIsAddModalOpen(false)}
+                className="px-5 py-2.5 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition-colors shadow-sm"
+              >
+                Simpan Data
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
